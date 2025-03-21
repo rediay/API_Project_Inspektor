@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.Core" Version="3.7.106.22" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.2-mauipre.1.22054.8" />
+    <PackageReference Include="PdfSharpCore" Version="1.3.56" />
+    <PackageReference Include="ReportViewerCore.NETCore" Version="15.1.17" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common.Services.Infrastructure\Common.Services.Infrastructure.csproj" ReferenceOutputAssembly="true" />
+    <ProjectReference Include="..\Common.Entities\Common.Entities.csproj" ReferenceOutputAssembly="true" />
+    <ProjectReference Include="..\Common.Utils\Common.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="Azure.Storage.Files.Shares" Version="12.12.1" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.3" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.2.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common.DTO\Common.DTO.csproj" ReferenceOutputAssembly="true" />
+    <ProjectReference Include="..\Common.Entities\Common.Entities.csproj" ReferenceOutputAssembly="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Repositories\Files\Files\querys\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.10" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.2-mauipre.1.22054.8" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common.DataAccess.EFCore\Common.DataAccess.EFCore.csproj" />
+    <ProjectReference Include="..\Common.Services\Common.Services.csproj" />
+    <ProjectReference Include="..\Common.Services.Infrastructure\Common.Services.Infrastructure.csproj" />
+    <ProjectReference Include="..\Common.Entities\Common.Entities.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,618 @@
+﻿@using System.Web
+@using Common.DTO.Queries
+@model Common.DTO.Queries.BulkQueryResponseDTO
+@{
+    Layout = null;
+    ViewData["Title"] = "Consulta Masiva";
+    //Layout = "~/Views/Shared/_LayoutPDF.cshtml";
+    List<ListsBulkQueryDTO> restrictiveLists = new List<ListsBulkQueryDTO>();
+    List<ListsBulkQueryDTO> laftPenalLists = new List<ListsBulkQueryDTO>();
+    List<ListsBulkQueryDTO> laftAdminLists = new List<ListsBulkQueryDTO>();
+    List<ListsBulkQueryDTO> sanctionsAffectationLists = new List<ListsBulkQueryDTO>();
+    List<ListsBulkQueryDTO> pepsLists = new List<ListsBulkQueryDTO>();
+    foreach (var item in Model.lists)
+    {
+        switch (item.ListGroupId)
+        {
+            case 1:
+                restrictiveLists.Add(item);
+                break;
+            case 2:
+                laftPenalLists.Add(item);
+                break;
+            case 3:
+                laftAdminLists.Add(item);
+                break;
+            case 4:
+            case 5:
+                sanctionsAffectationLists.Add(item);
+                break;
+            case 6:
+            case 7:
+                pepsLists.Add(item);
+                break;
+        }
+    }
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
+    @*<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">*@
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.2.619/styles/kendo.common-material.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.2.619/styles/kendo.material.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.2.619/styles/kendo.material.mobile.min.css" />
+    @*@section Styles{*@
+    <style>
+        #chart {
+            max-width: 650px;
+            margin: 35px auto;
+        }
+
+        .text-primary-report {
+            color: #182945;
+        }
+
+        .headerReportData {
+            background-color: #182945;
+        }
+
+            .headerReportData > p {
+                color: white;
+            }
+
+        /*  .flexrow {
+                                                                            display: -webkit-box;
+                                                                            display: -webkit-flex;
+                                                                            display: flex !important;
+                                                                        }
+
+                                                                            .flexrow > div {
+                                                                                -webkit-box-flex: 1;
+                                                                                -webkit-flex: 1;
+                                                                                flex: 1;
+                                                                            }
+
+                                                                        .printDetails > div {
+                                                                            display: inline-block;
+                                                                        }*/
+
+    </style>
+    @*}*@
+</head>
+<body>
+    <div class="container-fluid" data-layout="container">
+        <div class="content">
+            <header>
+                <div class="d-flex mb-5">
+                    <div class="flex-grow-1">
+                        @*<img src="@Model.Logo" style="max-height:100px;width:auto;" />*@
+                    </div>
+                    <div>
+                        <img src="~/img/logo/inspektor.png" class="ml-3" style="max-height:100px;width:auto;border-right: 1px dashed #898585;" />
+                        <img src="~/img/logo/logo_risk.png" class="ml-3" style="max-height:100px;width:auto;border-right: 1px dashed #898585;" />
+                        <img src="~/img/logo/iso.png" class="ml-3" style="max-height:100px;width:auto;" />
+                    </div>
+                </div>
+            </header>
+            <article>
+                <div class="row align-items-center mb-5">
+                    <div class="col text-center py-2 py-lg-4 light">
+                        <div class="bg-holder rounded-3 overlay overlay-0" style="background-color:#e9edf0;opacity: .2;">
+                            @*<div class="bg-holder rounded-3 overlay overlay-0" style="background-image:url(../img/illustrations/report.jpg);">*@
+                        </div>
+                        <div class="position-relative text-center">
+                            <h4 style="font-size:30px;color:#182945">Reporte Consulta No. @((int)Model.query.IdQueryCompany)</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-xs-6 col-md-6 col-sm-12 text-center border border-dark p-4 headerReportData">
+                        <p class="font-sans-serif lh-1 mb-1 fs-2">Información Consulta </p>
+                    </div>
+                    <div class="col-xs-6 col-md-6 col-sm-12  pb-4 text-center  border border-dark p-4 headerReportData">
+                        <p class="font-sans-serif lh-1 mb-1 fs-2">Información Reporte </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-3 col-md-3 pb-4 text-center border border-dark p-4 ">
+                        <p class="font-sans-serif lh-1 mb-1 fs-2 text-dark"><b>Nombre de Usuario Consulta</b></p>
+                    </div>
+                    <div class="col-xs-3 col-3 col-md-3 pb-4 text-center  border border-dark p-4">
+                        <p class="font-sans-serif lh-1 mb-1 fs-2">@Model.query.User.Name </p>
+                    </div>
+                    <div class="col-xs-3 col-3 col-md-3 pb-4 text-center  border border-dark p-4">
+                        <p class="font-sans-serif lh-1 mb-1 fs-2 text-dark"><b>Nombre de Usuario Reporte </b></p>
+                    </div>
+                    <div class="col-xs-3 col-3 col-md-3 pb-4 text-center  border border-dark p-4">
+                        <p class="font-sans-serif lh-1 mb-1 fs-2">@Model.query.User.Login </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-3 col-md-3 pb-4 text-center border border-dark p-4">
+                        <p class="font-sans-serif lh-1 mb-1 fs-2 text-dark"><b>Fecha y Hora de Consulta </b></p>
+                    </div>
+                    <div class="col-xs-3 col-3 col-md-3 pb-4 text-center border border-dark p-4">
+                        <p class="font-sans-serif lh-1 mb-1 fs-2">@Model.query.CreatedAt.ToString("dd/MM/yyyy HH:mm:ss") </p>
+                    </div>
+                    <div class="ccol-xs-3 col-3 col-md-3 pb-4 text-center border border-dark p-4">
+                        <p class="font-sans-serif lh-1 mb-1 fs-2 text-dark"><b>Fecha y Hora del Reporte </b></p>
+                    </div>
+                    <div class="col-xs-3 col-3 col-md-3 pb-4 text-center border border-dark p-4">
+                        <p class="font-sans-serif lh-1 mb-1 fs-2">@DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss") </p>
+                    </div>
+                </div>                
+
+                <div class="row printDetails mt-5">
+                    <div class="col-12 mt-5">
+
+                        <div class="text-center fw-bold">
+                            <h3 class="text-primary-report">Listas Restrictivas (@restrictiveLists.Count() Resultados) </h3>
+                        </div>
+                        <div class="table-responsive mt-3">
+                            @if (@restrictiveLists.Count() > 0)
+                            {
+                                <table class="table table-bordered table-fixed w-auto">
+                                    <thead style="background-color: #990000 !important;color:white;">
+                                        <tr>
+                                            <th scope="col">Prioridad</th>
+                                            <th scope="col">Tipo Documento</th>
+                                            <th scope="col">Identificación Consultada</th>
+                                            <th scope="col">Nombre Consultado</th>
+                                            <th scope="col">Documento Identidad</th>
+                                            <th scope="col">Nombre Completo</th>
+                                            <th scope="col">Nombre Tipo Lista</th>
+                                            <th scope="col">Tipo Persona</th>
+                                            <th class="th-md" scope="col">Alias</th>
+                                            <th scope="col">Cargo o Delito</th>
+                                            <th scope="col">Zona</th>
+                                            <th scope="col">Otra Informacion</th>
+                                            <th scope="col">Justificación</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in restrictiveLists)
+                                        {
+
+
+                                            <tr>
+                                                <td scope="row">@item.Priority</td>
+                                                <td>@item.NameTypeDocument</td>
+                                                <td>@item.IdentificationQuery</td>
+                                                <td>@item.NameQuery</td>
+                                                <td>@item.NameTypeDocument</td>
+                                                <td>@item.Identification</td>
+                                                <td>@item.Name</td>
+                                                <td>@item.NameListType</td>
+                                                <td>@item.KindPerson</td>
+                                                <td>@item.Alias</td>
+                                                <td>@item.Crime.Substring(0, Math.Min(@item.Crime.Length, 150)) ...</td>
+                                                <td>@item.Zone</td>
+                                                <td>@item.MoreInformation.Substring(0, Math.Min(@item.MoreInformation.Length, 150)) ...</td>
+                                                <td>@(item.MoreInformation!=null?(item.MoreInformation.Substring(0, Math.Min(@item.MoreInformation.Length, 150))):"")</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+
+                        </div>
+
+                        <div class="text-center fw-bold">
+                            <h3 class="text-primary-report">Listas asociadas a LA/FT/FPADM, Corrupción u otros delitos (Penal) y Extinción de Dominio (@laftPenalLists.Count() Resultados) </h3>
+                        </div>
+                        <div class="table-responsive mt-3">
+                            @if (@laftPenalLists.Count() > 0)
+                            {
+                                <table class="table table-bordered table-fixed w-auto">
+                                    <thead style="background-color: #990000 !important;color:white;">
+                                        <tr>
+                                            <th scope="col">Prioridad</th>
+                                            <th scope="col">Tipo Documento</th>
+                                            <th scope="col">Identificación Consultada</th>
+                                            <th scope="col">Nombre Consultado</th>
+                                            <th scope="col">Documento Identidad</th>
+                                            <th scope="col">Nombre Completo</th>
+                                            <th scope="col">Nombre Tipo Lista</th>
+                                            <th scope="col">Tipo Persona</th>
+                                            <th class="th-md" scope="col">Alias</th>
+                                            <th scope="col">Cargo o Delito</th>
+                                            <th scope="col">Zona</th>
+                                            <th scope="col">Otra Informacion</th>
+                                            <th scope="col">Justificación</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in laftPenalLists)
+                                        {
+                                            <tr>
+                                                <td scope="row">@item.Priority</td>
+                                                <td>@item.NameTypeDocument</td>
+                                                <td>@item.IdentificationQuery</td>
+                                                <td>@item.NameQuery</td>
+                                                <td>@item.Identification</td>
+                                                <td>@item.Name</td>
+                                                <td>@item.NameListType</td>
+                                                <td>@item.KindPerson</td>
+                                                <td>@item.Alias</td>
+                                                <td>@item.Crime.Substring(0, Math.Min(@item.Crime.Length, 150)) ...</td>
+                                                <td>@item.Zone</td>
+                                                <td>@item.MoreInformation.Substring(0, Math.Min(@item.MoreInformation.Length, 150)) ...</td>
+                                                <td>@(item.MoreInformation!=null?(item.MoreInformation.Substring(0, Math.Min(@item.MoreInformation.Length, 150))):"")</td>
+                                            </tr>
+
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mt-5">
+                    <div class="text-center fw-bold">
+                        <h3 class="text-primary-report">Listas Asociadas a LA/FT, Corrupción u otros delitos (Penal) (@laftAdminLists.Count() Resultados)</h3>
+                    </div>
+                    <div class="table-responsive">
+                        @if (@laftAdminLists.Count() > 0)
+                        {
+                            <table class="table table-bordered table-fixed">
+                                <thead style="background-color: #ff0000 !important;color:white;">
+                                    <tr>
+                                        <th class="th-sm" scope="col">Prioridad</th>
+                                        <th scope="col">Tipo Documento</th>
+                                        <th scope="col">Identificación Consultada</th>
+                                        <th scope="col">Nombre Consultado</th>
+                                        <th scope="col">Documento Identidad</th>
+                                        <th scope="col">Nombre Completo</th>
+                                        <th scope="col">Nombre Tipo Lista</th>
+                                        <th scope="col">Tipo Persona</th>
+                                        <th class="th-md" scope="col">Alias</th>
+                                        <th scope="col">Cargo o Delito</th>
+                                        <th scope="col">Zona</th>
+                                        <th scope="col">Otra Informacion</th>
+                                        <th scope="col">Justificación</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in laftAdminLists)
+                                    {
+                                        <tr>
+                                            <td scope="row">@item.Priority</td>
+                                            <td>@item.NameTypeDocument</td>
+                                            <td>@item.IdentificationQuery</td>
+                                            <td>@item.NameQuery</td>
+                                            <td>@item.Identification</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.NameListType</td>
+                                            <td>@item.KindPerson</td>
+                                            <td>@item.Alias</td>
+                                            <td>@item.Crime.Substring(0, Math.Min(@item.Crime.Length, 150)) ...</td>
+                                            <td>@item.Zone</td>
+                                            <td>@item.MoreInformation.Substring(0, Math.Min(@item.MoreInformation.Length, 150)) ...</td>
+                                            <td>@(item.MoreInformation!=null?(item.MoreInformation.Substring(0, Math.Min(@item.MoreInformation.Length, 150))):"")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+                </div>
+                <div class="col-12 mt-3">
+                    <div class="text-center fw-bold">
+                        <h3 class="text-primary-report">Listas Asociadas a LA/FT, Corrupción u otros similares (Administrativo) (@sanctionsAffectationLists.Count() Resultados)</h3>
+                    </div>
+                    <div class="table-responsive" id="listAdminCollapse">
+                        @if (@sanctionsAffectationLists.Count() > 0)
+                        {
+                            <table class="table table-bordered table-fixed">
+                                <thead style="background-color: #FFFF00 !important;color:white;">
+                                    <tr>
+                                        <th class="th-sm" scope="col">Prioridad</th>
+                                        <th scope="col">Tipo Documento</th>
+                                        <th scope="col">Identificación Consultada</th>
+                                        <th scope="col">Nombre Consultado</th>
+                                        <th scope="col">Documento Identidad</th>
+                                        <th scope="col">Nombre Completo</th>
+                                        <th scope="col">Nombre Tipo Lista</th>
+                                        <th scope="col">Tipo Persona</th>
+                                        <th class="th-md" scope="col">Alias</th>
+                                        <th scope="col">Cargo o Delito</th>
+                                        <th scope="col">Zona</th>
+                                        <th scope="col">Otra Informacion</th>
+                                        <th scope="col">Justificación</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in sanctionsAffectationLists)
+                                    {
+                                        <tr>
+                                            <td scope="row">@item.Priority</td>
+                                            <td>@item.NameTypeDocument</td>
+                                            <td>@item.IdentificationQuery</td>
+                                            <td>@item.NameQuery</td>
+                                            <td>@item.Identification</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.NameListType</td>
+                                            <td>@item.KindPerson</td>
+                                            <td>@item.Alias</td>
+                                            <td>@item.Crime.Substring(0, Math.Min(@item.Crime.Length, 150)) ...</td>
+                                            <td>@item.Zone</td>
+                                            <td>@item.MoreInformation.Substring(0, Math.Min(@item.MoreInformation.Length, 150)) ...</td>
+                                            <td>@(item.MoreInformation!=null?(item.MoreInformation.Substring(0, Math.Min(@item.MoreInformation.Length, 150))):"")</td>
+                                        </tr>
+
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-12 mt-3">
+                    <div class="text-center fw-bold">
+                        <h3 class="text-primary-report">Listas Informativas y PEPS (@pepsLists.Count() Resultados)</h3>
+                    </div>
+                    <div class="table-responsive">
+                        @if (@pepsLists.Count() > 0)
+                        {
+                            <table class="table table-bordered table-fixed">
+                                <thead style="background-color: #008000 !important;color:white;">
+                                    <tr>
+                                        <th class="th-sm" scope="col">Prioridad</th>
+                                        <th scope="col">Tipo Documento</th>
+                                        <th scope="col">Identificación Consultada</th>
+                                            <th scope="col">Nombre Consultado</th>
+                                        <th scope="col">Documento Identidad</th>
+                                        <th scope="col">Nombre Completo</th>
+                                        <th scope="col">Nombre Tipo Lista</th>
+                                        <th scope="col">Tipo Persona</th>
+                                        <th class="th-md" scope="col">Alias</th>
+                                        <th scope="col">Cargo o Delito</th>
+                                        <th scope="col">Zona</th>
+                                        <th scope="col">Otra Informacion</th>
+                                        <th scope="col">Justificación</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in pepsLists)
+                                    {
+                                        <tr>
+                                            <td scope="row">@item.Priority</td>
+                                            <td>@item.NameTypeDocument</td>
+                                            <td>@item.IdentificationQuery</td>
+                                            <td>@item.NameQuery</td>
+                                            <td>@item.Identification</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.NameListType</td>
+                                            <td>@item.KindPerson</td>
+                                            <td>@item.Alias</td>
+                                            <td>@item.Crime.Substring(0, Math.Min(@item.Crime.Length, 150)) ...</td>
+                                            <td>@item.Zone</td>
+                                            <td>@item.MoreInformation.Substring(0, Math.Min(@item.MoreInformation.Length, 150)) ...</td>
+                                            <td>@(item.MoreInformation!=null?(item.MoreInformation.Substring(0, Math.Min(@item.MoreInformation.Length, 150))):"")</td>
+                                        </tr>
+
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+                </div>
+                <div class="col-12 mt-3">
+                    <div class="text-center fw-bold">
+                        <h3 class="text-primary-report"> Listas Propias (@Model.ownLists.Count() Resultados)</h3>
+                    </div>
+                    <div class="table-responsive" id="listPropiasCollapse">
+                        @if (@Model.ownLists.Count() > 0)
+                        {
+                            <table class="table table-bordered table-fixed">
+                                <thead style="background-color: #284775 !important;color:white;">
+                                    <tr>
+                                        <th class="th-sm" scope="col">Tipo Documento</th>
+                                        <th scope="col">Identificación Consultada</th>
+                                        <th scope="col">Nombre Consultado</th>
+                                        <th scope="col">Documento Identidad	</th>
+                                        <th scope="col">Nombre Completo	</th>
+                                        <th scope="col">Nombre Tipo Lista</th>
+                                        <th scope="col">Tipo Persona</th>
+                                        <th scope="col">Alias</th>
+                                        <th scope="col">Cargo o Delito</th>
+                                        <th scope="col">Otra Informacion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.ownLists)
+                                    {
+
+
+                                        <tr>
+                                            <td>@item.DocumentType</td>
+                                            <td>@item.IdentificationQuery</td>
+                                            <td>@item.NameQuery</td>
+                                            <td>@item.Identification</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.OwnlistTypeName</td>
+                                            <td>@item.OwnlistTypeName</td>
+                                            <td>@item.Alias</td>
+                                            <td>@item.Crime</td>
+                                            <td>@item.MoreInformation</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+                </div>
+                <div class="col-12 mt-3">
+                    @if (@Model.procuraduria!=null )
+                    {
+                        <div class="text-center fw-bold">
+                            <h3 class="text-primary-report"> Resultado Procuraduria</h3>
+                        </div>
+                        @foreach (var item in Model.procuraduria)
+                        {
+                            <div>
+                                @(Html.Raw(HttpUtility.HtmlDecode(item.html_response)))
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="col-12 mt-3">
+                    @if (@Model.ramaJudicial!=null)
+                    {
+                        <div class="card border h-100 border-dark">
+                            <div class="card-body">
+                                <div class="card-title">
+                                    Rama judicial (@Model.ramaJudicial.Count() Resultados)
+                                </div>
+                                <div class="table-responsive">
+                                    @if (@Model.ramaJudicial.Count() > 0)
+                                    {
+                                        <table class="table table-bordered table-fixed">
+                                            <thead>
+                                                <tr>
+                                                    <th class="th-sm" scope="col">Id proceso</th>
+                                                    <th class="th-sm" scope="col">Número de Radicación</th>
+                                                    <th scope="col">fecha proceso</th>
+                                                    <th scope="col">Fecha ultima actuacion</th>
+                                                    <th scope="col">Despacho</th>
+                                                    <th scope="col">Departamento</th>
+                                                    <th scope="col">Sujetos procesales</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.ramaJudicial)
+                                                {
+
+
+                                                    <tr>
+                                                        <td>@item.idProceso</td>
+                                                        <td>
+                                                            <a target="_blank" href="https://consultaprocesos.ramajudicial.gov.co/Procesos/NumeroRadicacion">
+                                                                <span class="badge rounded-pill badge-soft-primary">@item.llaveProceso</span>
+                                                            </a>
+                                                        </td>
+                                                        <td>@item.fechaProceso</td>
+                                                        <td>@item.fechaUltimaActuacion</td>
+                                                        <td>@item.departamento</td>
+                                                        <td>@item.sujetosProcesales</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="col-12 mt-3">
+                    @if (@Model.ramaJudicialJEMPS!=null)
+                    {
+                        <div class="card border h-100 border-dark">
+                            <div class="card-body">
+                                <div class="card-title">
+                                    Rama judicial JEMPS (@Model.ramaJudicialJEMPS.Count() Resultados)
+                                </div>
+                                <div class="table-responsive" id="listRamaJudicialJEMPSCollapse">
+                                    @if (@Model.ramaJudicialJEMPS.Count() > 0)
+                                    {
+                                        <table class="table table-bordered table-fixed">
+                                            <thead>
+                                                <tr>
+                                                    <th class="th-sm" scope="col">Nombre</th>
+                                                    <th class="th-sm" scope="col">Identificacion</th>
+                                                    <th scope="col">Ciudad</th>
+                                                    <th scope="col">Radicado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.ramaJudicialJEMPS)
+                                                {
+                                                    <tr>
+                                                        <td>@item.NameResult</td>
+                                                        <td>@item.IdentificationNumberResult</td>
+                                                        <td>@item.CityName</td>
+                                                        <td>
+                                                            <a target="_blank" href="@item.Link">
+                                                                <span class="far fa-eye" target="_blank" data-bs-toggle="tooltip"
+                                                          data-bs-placement="top" title="ver radicado"></span>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </article>
+            <table style="border-bottom: 1px solid black; width: 100%">
+                <tr>
+                    <td class="section"></td>
+                    <td style="text-align:right">
+                        Page <span class="page"></span> of <span class="topage"></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+<footer> footer</footer>
+@*@section Scripts{*@
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+@*<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>*@
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+<!-- Latest compiled JavaScript -->
+@*<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>*@
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js"></script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+
+<script src="https://kendo.cdn.telerik.com/2019.2.619/js/kendo.all.min.js"></script>
+<script>
+    function subst() {
+        var vars = {};
+        var query_strings_from_url = document.location.search.substring(1).split('&');
+        for (var query_string in query_strings_from_url) {
+            if (query_strings_from_url.hasOwnProperty(query_string)) {
+                var temp_var = query_strings_from_url[query_string].split('=', 2);
+                vars[temp_var[0]] = decodeURI(temp_var[1]);
+            }
+        }
+        var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages'];
+        for (var css_class in css_selector_classes) {
+            if (css_selector_classes.hasOwnProperty(css_class)) {
+                var element = document.getElementsByClassName(css_selector_classes[css_class]);
+                for (var j = 0; j < element.length; ++j) {
+                    element[j].textContent = vars[css_selector_classes[css_class]];
+                }
+            }
+        }
+    }
+</script>
+<script>
+ 
+    window.onload = function() {
+        //createChart();
+    };
+    //$(document).ready(function() {
+    //    createChart();
+    //});
+    //Function.prototype.bind = Function.prototype.bind || function(thisp) {
+    //    var fn = this;
+    //    return function() {
+    //        return fn.apply(thisp, arguments);
+    //    };
+    //};                                                                                                                   //$(document).ready(createChart);
+</script>
+@*}*@
